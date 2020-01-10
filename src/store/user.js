@@ -1,18 +1,18 @@
 const user = {
     state: {
-        isTeacher: true,
+        isAdmin: true,
         userinfo: {}
     },
     getters: {
         userinfo: state => state.userinfo,
-        isTeacher: state => state.isTeacher
+        isAdmin: state => state.isAdmin
     },
     actions: {
         setUserInfo(context, payload) {
             context.commit('SET_USER_INFO', payload);
         },
         setTeacher(context, payload) {
-            context.commit('SET_TEACHER', payload)
+            context.commit('SET_IS_ADMIN', payload)
         }
     },
     mutations: {
@@ -20,8 +20,8 @@ const user = {
             let user = JSON.parse(JSON.stringify(payload));
             state.userinfo = user;
         },
-        'SET_TEACHER': (state, payload) => {
-            state.isTeacher = payload;
+        'SET_IS_ADMIN': (state, payload) => {
+            state.isAdmin = payload;
         }
     }
 }

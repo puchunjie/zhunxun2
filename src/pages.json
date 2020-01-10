@@ -1,6 +1,16 @@
 {
 	"pages": [
 		{
+			"path": "pages/login/suplier",
+			"style": {
+				"navigationBarTitleText": "密码登录"
+			}
+		},{
+			"path": "pages/login/suplierYZM",
+			"style": {
+				"navigationBarTitleText": "验证码登录"
+			}
+		},{
 			"path": "pages/index/index",
 			"style": {
 				"navigationBarTitleText": "追寻服务商助手"
