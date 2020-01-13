@@ -14,7 +14,7 @@ export const dateformatYMDHM = (value, formatStr = 'yyyy-MM-dd hh:mm') => {
     return df.format(d, formatStr)
 };
 
-export const dateformatYMD = (value, formatStr = 'yyyy-MM-dd') => {
+export const dateformatYMD = (value, formatStr = 'yyyy/MM/dd') => {
     if (!value) return "";
     let d = isDate(value) ? value : new Date(value*1000);
     return df.format(d, formatStr)

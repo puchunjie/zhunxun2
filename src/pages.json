@@ -1,6 +1,27 @@
 {
 	"pages": [
 		{
+			"path": "pages/institution/addInst_1",
+			"style": {
+				"navigationBarTitleText": "添加机构-基本信息"
+			}
+		},{
+			"path": "pages/institution/addInst_2",
+			"style": {
+				"navigationBarTitleText": "添加机构-商户类型"
+			}
+		},{
+			"path": "pages/institution/addInst_3",
+			"style": {
+				"navigationBarTitleText": "添加机构-银行卡资料"
+			}
+		},{
+			"path": "pages/institution/addInst_result",
+			"style": {
+				"navigationBarTitleText": "审核结果"
+			}
+		},
+		{
 			"path": "pages/login/suplier",
 			"style": {
 				"navigationBarTitleText": "密码登录"
@@ -19,6 +40,11 @@
 			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "追寻服务商助手"
+			}
+		},{
+			"path": "pages/institution/instView",
+			"style": {
+				"navigationBarTitleText": "机构详情"
 			}
 		}
 	],

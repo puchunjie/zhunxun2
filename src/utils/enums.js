@@ -1,16 +1,21 @@
 export const ScEnumKeys = {
-  leaveTypeEnum: "leaveTypeEnum",
-  sceneTypeEnum: "sceneTypeEnum",
+  shopStateEnum: "shopStateEnum",
+  shopTypeEnum: "shopTypeEnum",
+  shopBusinessTypeEnum: "shopBusinessTypeEnum",
 };
 export const ScEnums = {
-
-  leaveTypeEnum: [
+  shopStateEnum: [
     {value: 1, label: '事假'},
     {value: 2, label: '病假'},
     {value: 3, label: '其他'},
   ] ,
-  sceneTypeEnum: [
-    {value: 0, label: '家装'},
-    {value: 1, label: '工程'}
+  shopTypeEnum: [
+    {value: 0, label: '器乐'},
+    {value: 1, label: '舞蹈'},
+	{value: 2, label: '声乐'}
+  ] ,
+  shopBusinessTypeEnum: [
+    {value: 0, label: '小微商户'},
+    {value: 1, label: '特约商户'}
   ] 
 };

@@ -10,30 +10,14 @@
 			<span class="totle">8家机构</span>
 		</div>
 
-		<div class="add-new">+ 拓展新机构</div>
+		<div class="add-new" @click="openToAddInst">+ 拓展新机构</div>
 
 		<div class="list-content">
-			<div class="list-item">
-				<h3 class="name">大叔音乐 <span class="state-btn state1">待开通</span> </h3>
-				<div class="desc">拓展人：刘曦文 | 2019/12/01 申请</div>
+			<div class="list-item" v-for="(item,i) in list" :key="i" @tap="openToShopView" :data-shopId="item.shopId">
+				<h3 class="name">{{item.shopName}} <span class="state-btn" :class="'state'+item.state">{{ item.state | enumFilter(ScEnumKeys.shopStateEnum) }}</span> </h3>
+				<div class="desc">拓展人：{{item.userName}} | {{item.createdTimestamp | dateformatYMD}} 申请</div>
 				<i class="iconfont iconarrow"></i>
 			</div>
-			<div class="list-item">
-				<h3 class="name">大叔音乐 <span class="state-btn state2">已开通</span> </h3>
-				<div class="desc">拓展人：刘曦文 | 2019/12/01 申请</div>
-				<i class="iconfont iconarrow"></i>
-			</div>
-			<div class="list-item">
-				<h3 class="name">大叔音乐 <span class="state-btn state3">已驳回</span> </h3>
-				<div class="desc">拓展人：刘曦文 | 2019/12/01 申请</div>
-				<i class="iconfont iconarrow"></i>
-			</div>
-			<div class="list-item">
-				<h3 class="name">大叔音乐 <span class="state-btn state1">待开通</span> </h3>
-				<div class="desc">拓展人：刘曦文 | 2019/12/01 申请</div>
-				<i class="iconfont iconarrow"></i>
-			</div>
-
 			<div class="no-more">———没有更多了————</div>
 		</div>
 
@@ -60,8 +44,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	components: {
+		...mapGetters(['isAdmin']),
+		...mapGetters(['userinfo']),
 	},
 	data() {
 		return {
@@ -85,7 +72,8 @@ export default {
 				value: 5
 			}],
 			state: '',
-			filterShow: false
+			filterShow: false,
+			list:[]
 		}
 	},
 	computed: {
@@ -108,7 +96,33 @@ export default {
 		setALL(){
 			this.state = '';
 			console.log(this)
-		}		
+		},
+		getList(){
+			uni.request({
+				method: 'POST',
+				url: `${this.doMain}/supplier/shop/list`,
+				header: {
+					'content-type': 'application/x-www-form-urlencoded'
+				},
+				data: {"supplierUserId":this.userinfo.supplierUserId},
+				success: res => {
+					if (res.data.code === 0) {
+						this.list = res.data.data;
+					}else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+				}
+			})
+		},
+		openToAddInst(){
+			uni.navigateTo({
+				url:`../institution/addInst`
+			})
+		}
 	}
 }
 </script>
