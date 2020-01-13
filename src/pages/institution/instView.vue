@@ -2,34 +2,60 @@
 	<div class="class-detail-teacher">
 		<div class="class-info">
 		    <p class="p5">
-				<image class="logo" :src="shop.logoPic"></image>
-				{{shop.shopName || '' }}
+				大树音乐
+				<span class="state0">未开通</span>
 			</p>
 			<p class="p2">
-				地址：{{shop.districtFullName || ''}}
-			</p>
-			<p class="p2">
-				电话：{{shop.contactPhone || ''}}
-			</p>
-			<p class="p6" @click="openToTeachers">
-				师资介绍
+				申请时间：2019/12/01 14:00
 			</p>
 		</div>
 		<div class="class-info">
-		    <p class="p4">简介</p>
-		    <rich-text class="rich-text" :nodes="richText"></rich-text>
+		    <p class="p4">基本信息</p>
+		    <p class="p3">
+		    	机构类型：器乐
+		    </p>
+			<p class="p3">
+				机构号码：1056 2831
+			</p>
+			<p class="p3">
+				门店名称：九拍音乐矿业大学店
+			</p>
+			<p class="p3">
+				经营地址：江苏省徐州市泉山区矿业大学中山北路2号向北200米
+			</p>
+			<p class="p3">
+				联系人：王浩
+			</p>
+			<p class="p3">
+				联系电话：152 **** 6354
+			</p>
 		</div>
 		<div class="class-info">
-		    <p class="p4">相册</p>
-			<span v-for="pic in shop.shopPicList">
-				<image class="logo" :src="pic.picUrl"></image>
-			</span>
+		    <p class="p4">支付信息</p>
+			<p class="p3">
+				经营行业：居民生活/商业服务装饰/设计
+			</p>
+			<p class="p3">
+				银行卡号：**** **** ****  8590
+			</p>
+			<p class="p3">
+				交易费率：0.6%
+			</p>
+			<p class="p3">
+				信用卡支付：：器乐
+			</p>
 		</div>
 		<div class="class-info">
-		    <p class="p4">视频</p>
-			<span v-for="video in shop.shopVideoList">
-				<image class="logo" :src="video.videoUrl"></image>
-			</span>
+		    <p class="p4">缴费情况</p>
+			<p class="p3">
+				年费缴纳：2400/年
+			</p>
+			<p class="p3">
+				通过时间：2019/12/01 14:00
+			</p>
+			<p class="p3">
+				到期时间：2020/12/01 24:00
+			</p>
 		</div>
 	</div>
 	
@@ -273,8 +299,20 @@ page {
 		height:120upx;
 		line-height: 120upx;
 		font-size:36upx;
-		text-align: center;
+		text-align: left;
 		color: #333333;
+		.state0{
+			width: 108upx;
+			height: 36upx;
+			color: #ffffff;
+			background-color: #0099cc;
+			border-radius: 22upx;
+			font-size: 24upx;
+			line-height: 150%;
+			text-align: center;
+			padding: 6upx 10upx;
+			margin-left: 20upx;
+		}
 	}
 	.p6{
 		text-align: center;

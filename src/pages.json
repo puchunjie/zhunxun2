@@ -1,6 +1,11 @@
 {
 	"pages": [
 		{
+			"path": "pages/institution/instView",
+			"style": {
+				"navigationBarTitleText": "机构详情"
+			}
+		},{
 			"path": "pages/institution/addInst_1",
 			"style": {
 				"navigationBarTitleText": "添加机构-基本信息"
@@ -40,11 +45,6 @@
 			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "追寻服务商助手"
-			}
-		},{
-			"path": "pages/institution/instView",
-			"style": {
-				"navigationBarTitleText": "机构详情"
 			}
 		}
 	],
