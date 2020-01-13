@@ -190,3 +190,18 @@
 .iconarrow2-copy:before {
   content: "\e784";
 }
+.iconsuplier-team:before {
+  content: "\e65d";
+}
+.iconsuplier-teamchange:before {
+  content: "\e65f";
+}
+.iconsuplier-instchange:before {
+  content: "\e65e";
+}
+.iconsuplier-income:before {
+  content: "\e660";
+}
+.iconsuplier-kefu:before {
+  content: "\e661";
+}
