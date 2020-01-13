@@ -154,7 +154,7 @@ export default {
 @import url("../../styles/base.less");
 .addinst-container{
 	width: 750upx;
-	height: 1796upx;
+	height: 1840upx;
 	left: 0px;
 	color: @bg_color_green;
 	background-color: @bg_color_green;

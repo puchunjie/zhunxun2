@@ -1,6 +1,11 @@
 {
 	"pages": [
 		{
+			"path": "pages/me/team",
+			"style": {
+				"navigationBarTitleText": "团队管理"
+			}
+		},{
 			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "我的"
@@ -63,13 +68,13 @@
 				"text": "机构管理",
 				"iconPath": "static/tab/tab_03.png",
 				"selectedIconPath": "static/tab/tab_15.png"
-			},
+			}/*,
 			{
 				"pagePath": "pages/index/index",
 				"text": "增值业务",
 				"iconPath": "static/tab/tab_05.png",
 				"selectedIconPath": "static/tab/tab_16.png"
-			},
+			}*/,
 			{
 				"pagePath": "pages/index/index",
 				"text": "业绩分析",

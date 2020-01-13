@@ -120,7 +120,7 @@ export default {
 		},
 		openToAddInst(){
 			uni.navigateTo({
-				url:`../institution/addInst`
+				url:`../institution/addInst_1`
 			})
 		}
 	}
