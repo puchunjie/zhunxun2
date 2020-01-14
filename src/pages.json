@@ -1,6 +1,21 @@
 {
 	"pages": [
 		{
+			"path": "pages/login/suplier",
+			"style": {
+				"navigationBarTitleText": "密码登录"
+			}
+		},{
+			"path": "pages/performance/performanceInst",
+			"style": {
+				"navigationBarTitleText": "追寻服务商助手"
+			}
+		},{
+			"path": "pages/performance/performanceTeam",
+			"style": {
+				"navigationBarTitleText": "追寻服务商助手"
+			}
+		},{
 			"path": "pages/me/team",
 			"style": {
 				"navigationBarTitleText": "团队管理"
@@ -47,11 +62,6 @@
 			}
 		},
 		{
-			"path": "pages/login/suplier",
-			"style": {
-				"navigationBarTitleText": "密码登录"
-			}
-		},{
 			"path": "pages/login/suplierYZM",
 			"style": {
 				"navigationBarTitleText": "验证码登录"
@@ -86,7 +96,7 @@
 				"selectedIconPath": "static/tab/tab_16.png"
 			}*/,
 			{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/performance/performanceInst",
 				"text": "业绩分析",
 				"iconPath": "static/tab/tab_05.png",
 				"selectedIconPath": "static/tab/tab_16.png"

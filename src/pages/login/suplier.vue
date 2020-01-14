@@ -45,7 +45,7 @@ export default {
 			this.form.passWord = uni.getStorageSync('passWord');
 		},
         submit() {
-			if(this.form.mobilePhone == ''){
+			/*if(this.form.mobilePhone == ''){
 				uni.showToast({
 					title:"请填写手机号",
 					icon: 'none',
@@ -91,7 +91,10 @@ export default {
 						})
 					}
                 }
-            });
+            });*/
+			uni.switchTab({
+			    url: '/pages/index/index'
+			});
         }
     }
 }

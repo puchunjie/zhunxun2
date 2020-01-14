@@ -56,8 +56,8 @@ export default {
         			{
         			    label: '我的团队',
         			    icon: 'iconsuplier-team',
-        			    path: '/pages/user/changePhone'
-        			}, {
+        			    path: '/pages/me/team'
+        			}, /*{
         			    label: '交接机构',
         			    icon: 'iconsuplier-instchange',
         			    path: '/pages/user/changePwd'
@@ -69,7 +69,7 @@ export default {
         			    label: '收益提现',
         			    icon: 'iconsuplier-income',
         			    path: '/pages/user/changePwd'
-        			}, {
+        			}, */{
         			    label: '联系客服',
         			    icon: 'iconsuplier-kefu',
         			    path: '/pages/user/changePwd'
