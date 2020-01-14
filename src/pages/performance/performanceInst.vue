@@ -16,7 +16,7 @@
 					<span class="grey">月报</span>
 				</div>
 				<div style="width:50%;">
-					<dateSelect :value="selectDate"></dateSelect>
+					<dateSelect :value="selectDate" :fields="dateType"></dateSelect>
 				</div>
 			</div>
 			<div class="content-inner">
@@ -84,7 +84,8 @@ export default {
 				label:"按交易金额排序",
 				value:"0"
 			}],
-			selectDate:'2020/01/14'
+			selectDate:'2020/01/14',
+			dateType:'day'
         }
     },
     computed: {
