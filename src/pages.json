@@ -6,6 +6,16 @@
 				"navigationBarTitleText": "团队管理"
 			}
 		},{
+			"path": "pages/login/suplierRegister",
+			"style": {
+				"navigationBarTitleText": "添加团队成员"
+			}
+		},{
+			"path": "pages/me/suplierView",
+			"style": {
+				"navigationBarTitleText": "查看团队成员"
+			}
+		},{
 			"path": "pages/me/index",
 			"style": {
 				"navigationBarTitleText": "我的"

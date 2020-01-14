@@ -11,11 +11,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="addBtn">
+		<div class="addBtn" @click="addUser">
 			+ 添加团队成员
 		</div>
 		<div class="links">
-		    <div class="link-item">
+		    <div class="link-item" @click="viewSuplier">
 				<image class="portrait" src="../../static/boy.png"></image>
 		        <div class="name-div">
 		        	<span class="name-top">王大同</span>
@@ -98,6 +98,16 @@ export default {
 		    uni.redirectTo({
 		        url: '/pages/login/suplier'
 		    });
+		},
+		addUser(){
+			uni.redirectTo({
+			    url: '/pages/login/suplierRegister'
+			});
+		},
+		viewSuplier(){
+			uni.redirectTo({
+			    url: '/pages/me/suplierView'
+			});
 		}
     },
 	onShow() {
