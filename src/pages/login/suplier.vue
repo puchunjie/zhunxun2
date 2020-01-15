@@ -45,7 +45,7 @@ export default {
 			this.form.passWord = uni.getStorageSync('passWord');
 		},
         submit() {
-			/*if(this.form.mobilePhone == ''){
+			if(this.form.mobilePhone == ''){
 				uni.showToast({
 					title:"请填写手机号",
 					icon: 'none',
@@ -73,9 +73,10 @@ export default {
                 data: this.form,
                 success: res => {
                     if (res.data.code === 0) {
-						let suplierUser = res.data.data;
+						var suplierUser = res.data.data;
 						this.setUserInfo(suplierUser);
-						if(suplierUser.setIsAdmin() === 1){
+						/* console.info(suplierUser); */
+						if(suplierUser.isAdmin === 1){
 							this.setIsAdmin(true);
 						}else{
 							this.setIsAdmin(false);
@@ -91,10 +92,10 @@ export default {
 						})
 					}
                 }
-            });*/
-			uni.switchTab({
+            });
+			/* uni.switchTab({
 			    url: '/pages/index/index'
-			});
+			}); */
         }
     }
 }

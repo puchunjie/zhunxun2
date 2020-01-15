@@ -11,7 +11,7 @@ const user = {
         setUserInfo(context, payload) {
             context.commit('SET_USER_INFO', payload);
         },
-        setTeacher(context, payload) {
+        setIsAdmin(context, payload) {
             context.commit('SET_IS_ADMIN', payload)
         }
     },

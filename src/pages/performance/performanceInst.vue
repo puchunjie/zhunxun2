@@ -11,9 +11,9 @@
 		<div class="content">
 			<div class="content-title">
 				<div class="content-type"  style="width:50%;">
-					<span>日报</span>
-					<span class="grey">周报</span>
-					<span class="grey">月报</span>
+					<span @click="selectDay">日报</span>
+					<span class="grey" >周报</span>
+					<span class="grey" @click="selectMonth">月报</span>
 				</div>
 				<div style="width:50%;">
 					<dateSelect :value="selectDate" :fields="dateType"></dateSelect>
@@ -142,7 +142,7 @@ export default {
 		},
 		getNowFormatDate() {
 			var date = new Date();
-			var seperator1 = "-";
+			var seperator1 = '-';
 			var year = date.getFullYear();
 			var month = date.getMonth() + 1;
 			var strDate = date.getDate();
@@ -155,10 +155,29 @@ export default {
 			var currentdate = year + seperator1 + month + seperator1 + strDate;
 			return currentdate;
 		},
+		getNowFormatMonth() {
+			var date = new Date();
+			var seperator1 = '-';
+			var year = date.getFullYear();
+			var month = date.getMonth() + 1;
+			if (month >= 1 && month <= 9) {
+				month = "0" + month;
+			}
+			var currentdate = year + seperator1 + month;
+			return currentdate;
+		},
 		openTo(){
 			uni.redirectTo({
 			    url: '/pages/performance/performanceTeam'
 			});
+		},
+		selectDay(){
+			this.dateType = 'day';
+			this.selectDate = this.getNowFormatDate();
+		},
+		selectMonth(){
+			this.dateType = 'month';
+			this.selectDate = this.getNowFormatMonth();
 		}
     },
 	onShow() {
