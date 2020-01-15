@@ -80,9 +80,9 @@ export default {
                 data: {mobilePhone:this.form.mobilePhone},
                 success: res => {
                     if (res.data.code === 0) {
-						let suplierUser = res.data.data;
+						var suplierUser = res.data.data;
                         this.setUserInfo(suplierUser);
-						if(suplierUser.setIsAdmin() === 1){
+						if(suplierUser.isAdmin === 1){
 							this.setIsAdmin(true);
 						}else{
 							this.setIsAdmin(false);

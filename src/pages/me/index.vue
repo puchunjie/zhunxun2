@@ -4,27 +4,29 @@
 			<image class="portrait" src="../../static/boy.png"></image>
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">沈先生生</span>
-					<span class="shopType">城市服务商</span>
-					<span class="level">1级</span> 	
+					<span class="name">{{suplierUser.userName}}</span>
+					<span class="shopType" v-show="suplierUser.isAdmin == 0">个人服务商</span>
+					<span class="shopType" v-show="suplierUser.isAdmin == 1">城市服务商</span>
+					<span class="level" v-show="suplierUser.isAdmin == 0">{{suplierUser.userLevel}}级</span> 	
+					<span class="level" v-show="suplierUser.isAdmin == 1">{{suplierUser.supplierLevel}}级</span> 
 				</div>
 				<div class="inst-name">
-					上海追寻教育科技有限公司
+					{{suplierUser.supplierName}}
 				</div>
 			</div>
 		</div>
 		<div class="menu-panel">
 			<div class="menu-item">
 				<span class="label">拓展奖励</span>
-				<span class="label">1980.00</span>
+				<span class="label">{{suplierUser.expandBalanceStr}}</span>
 			</div>
 			<div class="menu-item">
 				<span class="label">运营奖励</span>
-				<span class="label">200.00</span>
+				<span class="label">{{suplierUser.operateBalanceStr}}</span>
 			</div>
 			<div class="menu-item">
 				<span class="label">增值奖励</span>
-				<span class="label">3000.00</span>
+				<span class="label">{{suplierUser.incrementBalanceStr}}</span>
 			</div>
 		</div>
 		<div class="links">
@@ -46,11 +48,11 @@ export default {
     },
     data() {
         return {
-            
+            suplierUser:null
         }
     },
     computed: {
-        //...mapGetters(['userinfo', 'isAdimin']),
+        ...mapGetters(['userinfo']),
         links() {
             let arr = [
         			{
@@ -90,10 +92,31 @@ export default {
 		    uni.redirectTo({
 		        url: '/pages/login/suplier'
 		    });
+		},
+		getSuplierUser() {
+			uni.request({
+			    method: 'POST',
+			    url: `${this.doMain}/supplier/user/view`,
+			    header: {
+			        'content-type': 'application/x-www-form-urlencoded'
+			    },
+			    data: {"supplierUserId":this.userinfo.supplierUserId},
+			    success: res => {
+			        if (res.data.code === 0) {
+			            this.suplierUser = res.data.data;
+			        }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+			    }
+			});
 		}
     },
 	onShow() {
-		
+		this.getSuplierUser();
 	}
 }
 </script>

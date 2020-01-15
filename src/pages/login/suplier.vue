@@ -37,7 +37,7 @@ export default {
     methods: {
         ...mapActions(['setUserInfo', 'setIsAdmin']),
 		goLoginYZM(){
-		    uni.redirectTo({ url: '/pages/login/teacherYZM' })
+		    uni.redirectTo({url:'/pages/login/suplierYZM'})
 		},
 		onShow(){
 			//从本地取账号和密码

@@ -4,12 +4,14 @@
 			<image class="portrait" src="../../static/boy.png"></image>
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">沈先生生</span>
-					<span class="shopType">城市服务商</span>
-					<span class="level">1级</span> 	
+					<span class="name">{{suplierUser.userName}}</span>
+					<span class="shopType" v-show="suplierUser.isAdmin == 0">个人服务商</span>
+					<span class="shopType" v-show="suplierUser.isAdmin == 1">城市服务商</span>
+					<span class="level" v-show="suplierUser.isAdmin == 0">{{suplierUser.userLevel}}级</span> 	
+					<span class="level" v-show="suplierUser.isAdmin == 1">{{suplierUser.supplierLevel}}级</span> 
 				</div>
 				<div class="inst-name">
-					上海追寻教育科技有限公司
+					{{suplierUser.supplierName}}
 				</div>
 			</div>
 		</div>
@@ -24,7 +26,8 @@ export default {
     },
     data() {
         return {
-            
+            suplierUser:null,
+			supplierUserId:0
         }
     },
     computed: {
@@ -35,10 +38,34 @@ export default {
 			uni.redirectTo({
 			    url: '/pages/login/suplierRegister'
 			});
+		},
+		getSuplierUser() {
+			uni.request({
+			    method: 'POST',
+			    url: `${this.doMain}/supplier/user/view`,
+			    header: {
+			        'content-type': 'application/x-www-form-urlencoded'
+			    },
+			    data: {"supplierUserId":this.supplierUserId},
+			    success: res => {
+			        if (res.data.code === 0) {
+			            this.suplierUser = res.data.data;
+			        }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+			    }
+			});
 		}
     },
+	onLoad:function(e) {
+		this.supplierUserId = e.supplierUserId;
+	},
 	onShow() {
-		
+		this.getSuplierUser();
 	}
 }
 </script>

@@ -3,11 +3,11 @@
 		<div class="me-header">
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">默认团队</span>
-					<span class="level">1级</span> 	
+					<span class="name">{{suplier.supplierName}}</span>
+					<span class="level">{{suplier.supplierLevel}}级</span> 	
 				</div>
 				<div class="inst-name">
-					团队人数：2人
+					团队人数：{{suplier.userNum}}人
 				</div>
 			</div>
 		</div>
@@ -15,33 +15,15 @@
 			+ 添加团队成员
 		</div>
 		<div class="links">
-		    <div class="link-item" @click="viewSuplier">
+			<div class="link-item" v-for="(item,i) in suplierUserList" :key="i" @tap="viewSuplierUser" :data-supplierUserId="item.supplierUserId">
 				<image class="portrait" src="../../static/boy.png"></image>
 		        <div class="name-div">
-		        	<span class="name-top">王大同</span>
-		        	<span class="name-bottom">拓展3家机构</span> 
+		        	<span class="name-top">{{ item.userName }}</span>
+		        	<span class="name-bottom">拓展{{ item.createShopNum }}家机构</span> 
 		        </div> 
 				<i class="iconfont iconico qr"></i>
 		        <i class="iconfont arrow iconarrow"></i>
 		    </div>
-			<div class="link-item">
-				<image class="portrait" src="../../static/boy.png"></image>
-				<div class="name-div">
-					<span class="name-top">王大同</span>
-					<span class="name-bottom">拓展3家机构</span> 
-				</div>
-				<i class="iconfont iconico qr"></i>
-			    <i class="iconfont arrow iconarrow"></i>
-			</div>
-			<div class="link-item">
-				<image class="portrait" src="../../static/boy.png"></image>
-			    <div class="name-div">
-			    	<span class="name-top">王大同</span>
-			    	<span class="name-bottom">拓展3家机构</span> 
-			    </div> 
-				<i class="iconfont iconico qr"></i>
-			    <i class="iconfont arrow iconarrow"></i>
-			</div>
 		</div>
     </div>
 </template>
@@ -54,11 +36,12 @@ export default {
     },
     data() {
         return {
-            
+            suplierUserList:[],
+			suplier:null
         }
     },
     computed: {
-        //...mapGetters(['userinfo', 'isAdimin']),
+        ...mapGetters(['userinfo']),
         links() {
             let arr = [
         			{
@@ -104,14 +87,58 @@ export default {
 			    url: '/pages/login/suplierRegister'
 			});
 		},
-		viewSuplier(){
+		viewSuplierUser(e){
+			var supplierUserId = e.currentTarget.dataset.supplieruserid;
 			uni.redirectTo({
-			    url: '/pages/me/suplierView'
+			    url: '/pages/me/suplierView?supplierUserId='+supplierUserId
+			});
+		},
+		getSuplierUserList() {
+			uni.request({
+			    method: 'POST',
+			    url: `${this.doMain}/supplier/user/list`,
+			    header: {
+			        'content-type': 'application/x-www-form-urlencoded'
+			    },
+			    data: {"supplierId":this.userinfo.supplierId},
+			    success: res => {
+			        if (res.data.code === 0) {
+			            this.suplierUserList = res.data.data;
+			        }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+			    }
+			});
+		},
+		getSuplier() {
+			uni.request({
+			    method: 'POST',
+			    url: `${this.doMain}/supplier/view`,
+			    header: {
+			        'content-type': 'application/x-www-form-urlencoded'
+			    },
+			    data: {"supplierId":this.userinfo.supplierId},
+			    success: res => {
+			        if (res.data.code === 0) {
+			            this.suplier = res.data.data;
+			        }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+			    }
 			});
 		}
     },
 	onShow() {
-		
+		this.getSuplierUserList();
+		this.getSuplier();
 	}
 }
 </script>
