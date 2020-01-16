@@ -11,32 +11,33 @@
 		<div class="content">
 			<div class="content-title">
 				<div class="content-type"  style="width:50%;">
-					<span>日报</span>
+					<span  :class="!isMonth && 'grey'" @click="selectDay">日报</span>
 					<!-- <span class="grey">周报</span> -->
-					<span class="grey">月报</span>
+					<span  :class="isMonth && 'grey'" @click="selectMonth">月报</span>
 				</div>
 				<div style="width:50%;">
-					<dateSelect :value="selectDate"></dateSelect>
+					<dateSelect v-model="dateValue" @bindChange="getStat" v-if="!isMonth" fields="day"></dateSelect>
+					<dateSelect v-model="monthValue" @bindChange="getStat" v-if="isMonth" fields="month"></dateSelect>
 				</div>
 			</div>
 			<div class="content-inner">
 				<div class="amount">
 					<span class="tip">收益总额</span>
-					<span class="tipAmount">¥ 3600.00</span>
+					<span class="tipAmount">¥ {{total.sysIncome | priceFilter}}</span>
 				</div>
 			</div>
 			<div class="content-bottom">
 				<div class="num">
 					<span class="tip">拓展机构</span>
-					<span>6家</span>
+					<span>{{total.shopNum || 0}}家</span>
 				</div>
 				<div class="num">
 					<span class="tip">交易笔数</span>
-					<span>10笔</span>
+					<span>{{total.orderNum || 0}}笔</span>
 				</div>
 				<div class="num">
 					<span class="tip">交易机构</span>
-					<span>1个</span>
+					<span>{{total.orderShopNum || 0}}个</span>
 				</div>
 			</div>
 		</div>
@@ -49,27 +50,13 @@
 					<singleElection value="0" :data="sortArray"></singleElection>
 				</div>
 			</div>
-		    <div class="link-item">
-		    	<div>梁朝伟 <span class="tip" style="padding-left:20upx">拓展商户数: 5</span></div>
+		    <div class="link-item" v-for="(item,i) in list">
+		    	<div>{{item.userName}} <span class="tip" style="padding-left:20upx">拓展商户数: {{item.shopNum}}</span></div>
 		    	<div class="name-div">
-		    		<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-		    		<span class="name-bottom"  style="width: 50%;text-align: right;">交易笔数: 5</span> 
+		    		<span class="name-top"  style="width: 50%;text-align: right;">¥ {{item.sysIncome | priceFilter}}</span>
+		    		<span class="name-bottom"  style="width: 50%;text-align: right;">交易笔数: {{item.orderNum}}</span> 
 		    	</div>
 		    </div>
-			<div class="link-item">
-				<div>梁朝伟 <span class="tip" style="padding-left:20upx">拓展商户数: 5</span></div>
-				<div class="name-div">
-					<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-					<span class="name-bottom"  style="width: 50%;text-align: right;">交易笔数: 5</span> 
-				</div>
-			</div>
-			<div class="link-item">
-				<div>梁朝伟 <span class="tip" style="padding-left:20upx">拓展商户数: 5</span></div>
-				<div class="name-div">
-					<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-					<span class="name-bottom"  style="width: 50%;text-align: right;">交易笔数: 5</span> 
-				</div>
-			</div>
 		</div>
     </div>
 </template>
@@ -85,88 +72,115 @@ export default {
     data() {
         return {
             sortArray:[{
-				label:"按交易金额排序",
-				value:"0"
-			}],
-			selectDate:'2020/01/14'
+    			label:"按交易金额排序",
+    			value:"0"
+    		}],
+    		dateValue:'',
+    		monthValue:'',
+    		isMonth:false,
+    		form:{
+    			userId: '',
+    			year:'',
+    			month:'',
+    			day:'',
+    			week:'',
+    			sort:'sysIncome',
+    			order:'DESC'
+    		},
+    		list:[],
+    		total:{}
         }
     },
     computed: {
-        //...mapGetters(['userinfo', 'isAdimin']),
-        links() {
-            let arr = [
-        			{
-        			    label: '王大同',
-        			    icon: 'iconsuplier-team',
-        			    path: '/pages/user/changePhone'
-        			}, {
-        			    label: '交接机构',
-        			    icon: 'iconsuplier-instchange',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '交接团队管理员',
-        			    icon: 'iconsuplier-teamchange',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '收益提现',
-        			    icon: 'iconsuplier-income',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '联系客服',
-        			    icon: 'iconsuplier-kefu',
-        			    path: '/pages/user/changePwd'
-        			}
-        		]
-            return arr
-        }
+        ...mapGetters(['userinfo'])
     },
     methods: {
-		...mapActions(['clearUserInfo']),
-		goLink(item) {
-		    uni.navigateTo({
-		        url: item.path
-		    });
-		},
-		logout() {
-		    this.clearUserInfo();
-		    uni.redirectTo({
-		        url: '/pages/login/suplier'
-		    });
-		},
-		addUser(){
-			uni.redirectTo({
-			    url: '/pages/login/suplierRegister'
-			});
-		},
-		viewSuplier(){
-			uni.redirectTo({
-			    url: '/pages/me/suplierView'
-			});
-		},
-		getNowFormatDate() {
-			var date = new Date();
-			var seperator1 = "/";
-			var year = date.getFullYear();
-			var month = date.getMonth() + 1;
-			var strDate = date.getDate();
-			if (month >= 1 && month <= 9) {
-				month = "0" + month;
-			}
-			if (strDate >= 0 && strDate <= 9) {
-				strDate = "0" + strDate;
-			}
-			var currentdate = year + seperator1 + month + seperator1 + strDate;
-			return currentdate;
-		},
-		openTo(){
-			uni.redirectTo({
-			    url: '/pages/performance/performanceInst'
-			});
-		}
+    	getNowFormatDate() {
+    		var date = new Date();
+    		var seperator1 = '-';
+    		var year = date.getFullYear();
+    		var month = date.getMonth() + 1;
+    		var strDate = date.getDate();
+    		if (month >= 1 && month <= 9) {
+    			month = "0" + month;
+    		}
+    		if (strDate >= 0 && strDate <= 9) {
+    			strDate = "0" + strDate;
+    		}
+    		var currentdate = year + seperator1 + month + seperator1 + strDate;
+    		return currentdate;
+    	},
+    	getNowFormatMonth() {
+    		var date = new Date();
+    		var seperator1 = '-';
+    		var year = date.getFullYear();
+    		var month = date.getMonth() + 1;
+    		if (month >= 1 && month <= 9) {
+    			month = "0" + month;
+    		}
+    		var currentdate = year + seperator1 + month;
+    		return currentdate;
+    	},
+    	openTo(){
+    		uni.switchTab({
+    			url:'/pages/performance/performanceInst'
+    		});
+    	},
+    	selectDay(){
+    		this.isMonth = false;
+    		this.getStat();
+    	},
+    	selectMonth(){
+    		this.isMonth = true;
+    		this.getStat();
+    	},
+    	getStat(e){
+    		this.form.userId = this.userinfo.supplierUserId;
+    		if(this.isMonth){
+    			if(e != undefined){
+    				this.monthValue = e;
+    			}
+    			let days = this.monthValue.split('-');
+    			this.form.year = days[0];
+    			this.form.month = days[1];
+    			this.form.day = '';
+    		}else{
+    			if(e != undefined){
+    				this.dateValue = e;
+    			}
+    			let days = this.dateValue.split('-');
+    			this.form.year = days[0];
+    			this.form.month = days[1];
+    			this.form.day = days[2];
+    		}
+    		uni.request({
+    		    method: 'POST',
+    		    url: `${this.doMain}/stat/supplier`,
+    		    header: {
+    		        'content-type': 'application/x-www-form-urlencoded'
+    		    },
+    		    data: this.form,
+    		    success: res => {
+    				console.info(res.data.data);
+    		        if (res.data.code === 0) {
+    					this.list = res.data.data.stat;
+    					this.total = res.data.data.total;
+    		        }else{
+    					uni.showToast({
+    						title:res.data.fieldErrors[0].message,
+    						icon: 'none',
+    						duration: 1000
+    					})
+    				}
+    		    }
+    		});
+    	}
     },
-	onShow() {
-		this.selectDate = this.getNowFormatDate();
-	}
+    onShow() {
+    	this.dateValue = this.getNowFormatDate();
+    	this.monthValue = this.getNowFormatMonth();
+    	this.getStat();
+    }
 }
 </script>
 

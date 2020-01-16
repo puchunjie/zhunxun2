@@ -16,24 +16,24 @@
 					<span :class="isMonth && 'grey'" @click="selectMonth">月报</span>
 				</div>
 				<div style="width:50%;">
-					<dateSelect :value="dateValue" v-if="!isMonth" fields="day"></dateSelect>
-					<dateSelect :value="monthValue" v-if="isMonth" fields="month"></dateSelect>
+					<dateSelect v-model="dateValue" @bindChange="getStat" v-if="!isMonth" fields="day"></dateSelect>
+					<dateSelect v-model="monthValue" @bindChange="getStat" v-if="isMonth" fields="month"></dateSelect>
 				</div>
 			</div>
 			<div class="content-inner">
 				<div class="amount">
 					<span class="tip">收益总额</span>
-					<span class="tipAmount">¥ 3600.00</span>
+					<span class="tipAmount">¥ {{total.totalAmount | priceFilter}}</span>
 				</div>
 			</div>
 			<div class="content-bottom">
 				<div class="num">
 					<span class="tip">交易笔数</span>
-					<span>10笔</span>
+					<span>{{total.orderNum || 0}}笔</span>
 				</div>
 				<div class="num">
 					<span class="tip">交易机构</span>
-					<span>1个</span>
+					<span>{{total.orderShopNum || 0}}个</span>
 				</div>
 			</div>
 		</div>
@@ -46,27 +46,13 @@
 					<singleElection value="0" :data="sortArray"></singleElection>
 				</div>
 			</div>
-		    <div class="link-item">
-		    	<div>大树音乐</div>
+		    <div class="link-item"  v-for="(item,i) in list">
+		    	<div>{{item.shopName}}</div>
 		    	<div class="name-div">
-		    		<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-		    		<span class="name-bottom"  style="width: 50%;text-align: right;">开通奖励 500.00  交易笔数: 5</span> 
+		    		<span class="name-top"  style="width: 50%;text-align: right;">¥ {{item.totalAmount | priceFilter}}</span>
+		    		<span class="name-bottom"  style="width: 50%;text-align: right;">开通奖励 {{item.openReward || 0}}  交易笔数: {{item.orderNum || 0}}</span> 
 		    	</div>
 		    </div>
-			<div class="link-item">
-				<div>大树音乐</div>
-				<div class="name-div" >
-					<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-					<span class="name-bottom"  style="width: 50%;text-align: right;">开通奖励 500.00  交易笔数: 5</span> 
-				</div>
-			</div>
-			<div class="link-item">
-				<div>大树音乐</div>
-				<div class="name-div" >
-					<span class="name-top"  style="width: 50%;text-align: right;">¥ 2300.00</span>
-					<span class="name-bottom"  style="width: 50%;text-align: right;">开通奖励 500.00  交易笔数: 5</span> 
-				</div>
-			</div>
 		</div>
     </div>
 </template>
@@ -87,61 +73,24 @@ export default {
 			}],
 			dateValue:'',
 			monthValue:'',
-			isMonth:false
+			isMonth:false,
+			form:{
+				userId: '',
+				year:'',
+				month:'',
+				day:'',
+				week:'',
+				sort:'totalAmount',
+				order:'DESC'
+			},
+			list:[],
+			total:{}
         }
     },
     computed: {
-        //...mapGetters(['userinfo', 'isAdimin']),
-        links() {
-            let arr = [
-        			{
-        			    label: '王大同',
-        			    icon: 'iconsuplier-team',
-        			    path: '/pages/user/changePhone'
-        			}, {
-        			    label: '交接机构',
-        			    icon: 'iconsuplier-instchange',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '交接团队管理员',
-        			    icon: 'iconsuplier-teamchange',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '收益提现',
-        			    icon: 'iconsuplier-income',
-        			    path: '/pages/user/changePwd'
-        			}, {
-        			    label: '联系客服',
-        			    icon: 'iconsuplier-kefu',
-        			    path: '/pages/user/changePwd'
-        			}
-        		]
-            return arr
-        }
+        ...mapGetters(['userinfo'])
     },
     methods: {
-		...mapActions(['clearUserInfo']),
-		goLink(item) {
-		    uni.navigateTo({
-		        url: item.path
-		    });
-		},
-		logout() {
-		    this.clearUserInfo();
-		    uni.redirectTo({
-		        url: '/pages/login/suplier'
-		    });
-		},
-		addUser(){
-			uni.redirectTo({
-			    url: '/pages/login/suplierRegister'
-			});
-		},
-		viewSuplier(){
-			uni.redirectTo({
-			    url: '/pages/me/suplierView'
-			});
-		},
 		getNowFormatDate() {
 			var date = new Date();
 			var seperator1 = '-';
@@ -175,14 +124,58 @@ export default {
 		},
 		selectDay(){
 			this.isMonth = false;
+			this.getStat();
 		},
 		selectMonth(){
 			this.isMonth = true;
+			this.getStat();
+		},
+		getStat(e){
+			this.form.userId = this.userinfo.supplierUserId;
+			if(this.isMonth){
+				if(e != undefined){
+					this.monthValue = e;
+				}
+				let days = this.monthValue.split('-');
+				this.form.year = days[0];
+				this.form.month = days[1];
+				this.form.day = '';
+			}else{
+				if(e != undefined){
+					this.dateValue = e;
+				}
+				let days = this.dateValue.split('-');
+				this.form.year = days[0];
+				this.form.month = days[1];
+				this.form.day = days[2];
+			}
+			uni.request({
+			    method: 'POST',
+			    url: `${this.doMain}/stat/shop`,
+			    header: {
+			        'content-type': 'application/x-www-form-urlencoded'
+			    },
+			    data: this.form,
+			    success: res => {
+					console.info(res.data.data);
+			        if (res.data.code === 0) {
+						this.list = res.data.data.stat;
+						this.total = res.data.data.total;
+			        }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
+			    }
+			});
 		}
     },
 	onShow() {
 		this.dateValue = this.getNowFormatDate();
 		this.monthValue = this.getNowFormatMonth();
+		this.getStat();
 	}
 }
 </script>
