@@ -11,7 +11,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="addBtn" @click="addUser">
+		<div class="addBtn" @click="addUser" v-show="isAdmin == true">
 			+ 添加团队成员
 		</div>
 		<div class="links">
@@ -41,7 +41,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['userinfo']),
+        ...mapGetters(['userinfo','isAdmin']),
         links() {
             let arr = [
         			{
