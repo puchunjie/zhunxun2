@@ -12,7 +12,7 @@
 			<div class="content-title">
 				<div class="content-type"  style="width:50%;">
 					<span>日报</span>
-					<span class="grey">周报</span>
+					<!-- <span class="grey">周报</span> -->
 					<span class="grey">月报</span>
 				</div>
 				<div style="width:50%;">
@@ -145,7 +145,7 @@ export default {
 		},
 		getNowFormatDate() {
 			var date = new Date();
-			var seperator1 = "-";
+			var seperator1 = "/";
 			var year = date.getFullYear();
 			var month = date.getMonth() + 1;
 			var strDate = date.getDate();

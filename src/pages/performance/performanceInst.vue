@@ -11,12 +11,13 @@
 		<div class="content">
 			<div class="content-title">
 				<div class="content-type"  style="width:50%;">
-					<span @click="selectDay">日报</span>
-					<span class="grey" >周报</span>
-					<span class="grey" @click="selectMonth">月报</span>
+					<span :class="!isMonth && 'grey'" @click="selectDay">日报</span>
+					<!-- <span class="grey" >周报</span> -->
+					<span :class="isMonth && 'grey'" @click="selectMonth">月报</span>
 				</div>
 				<div style="width:50%;">
-					<dateSelect :value="selectDate" :fields="dateType"></dateSelect>
+					<dateSelect :value="dateValue" v-if="!isMonth" fields="day"></dateSelect>
+					<dateSelect :value="monthValue" v-if="isMonth" fields="month"></dateSelect>
 				</div>
 			</div>
 			<div class="content-inner">
@@ -84,8 +85,9 @@ export default {
 				label:"按交易金额排序",
 				value:"0"
 			}],
-			selectDate:'2020/01/14',
-			dateType:'day'
+			dateValue:'',
+			monthValue:'',
+			isMonth:false
         }
     },
     computed: {
@@ -172,16 +174,15 @@ export default {
 			});
 		},
 		selectDay(){
-			this.dateType = 'day';
-			this.selectDate = this.getNowFormatDate();
+			this.isMonth = false;
 		},
 		selectMonth(){
-			this.dateType = 'month';
-			this.selectDate = this.getNowFormatMonth();
+			this.isMonth = true;
 		}
     },
 	onShow() {
-		this.selectDate = this.getNowFormatDate();
+		this.dateValue = this.getNowFormatDate();
+		this.monthValue = this.getNowFormatMonth();
 	}
 }
 </script>
