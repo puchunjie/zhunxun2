@@ -2,20 +2,26 @@
 	<view class="index-container">
 		<div class="search-div">
 			<i class="search-icon iconfont iconsousuo"></i>
-			<input class="inpt" placeholder="请输入机构号或机构名称" confirm-type="search" @confirm="search" type="text">
+			<input class="inpt" placeholder="请输入机构号或机构名称" confirm-type="searchShop" @confirm="searchShop" type="text">
 		</div>
 
 		<div class="state-filter">
-			<div class="state-btn" @click="showFilter">全部状态 <i class="iconfont arrow iconarrow1-copy"></i></div> 
-			<span class="totle">8家机构</span>
+			<div class="state-btn" @click="showFilter">{{stateStr}} <i class="iconfont arrow iconarrow1-copy"></i></div> 
+			<span class="totle">{{list.length || 0}}家机构</span>
 		</div>
 
 		<div class="add-new" @click="openToAddInst">+ 拓展新机构</div>
 
 		<div class="list-content">
 			<div class="list-item" v-for="(item,i) in list" :key="i" @tap="openToShopView" :data-shopId="item.shopId">
-				<h3 class="name">{{item.shopName}} <span class="state-btn" :class="'state'+item.state">{{ item.state | enumFilter(ScEnumKeys.shopStateEnum) }}</span> </h3>
-				<div class="desc">拓展人：{{item.userName}} | {{item.createdTimestamp | dateformatYMD}} 申请</div>
+				<h3 class="name">{{item.shopName}} 
+					<span class="state-btn" v-if="item.state == 1 && (item.isSign == 0 || item.isSign == null) && item.isOpen == 1" :class="'state'+item.state">待签约</span>
+					<span class="state-btn" v-if="item.state == 1 && item.isSign == 1 && item.isOpen == 1" :class="'state'+item.state">已签约</span> 
+					<span class="state-btn" v-if="item.state == 1 && (item.isOpen == 0|| item.isOpen == null) && (item.isSign == 0|| item.isSign == null)" :class="'state'+item.state">待开通</span> 
+					<span class="state-btn" v-if="item.state == 1 && item.isOpen == 1 && (item.isSign == 0|| item.isSign == null)" :class="'state'+item.state">已开通</span> 
+					<span class="state-btn" v-if="item.state != 1" :class="'state'+item.state">{{ item.state | enumFilter(ScEnumKeys.shopStateEnum) }}</span> 
+				</h3>
+				<div class="desc">拓展人：{{item.userName || '无'}} | {{item.createdTimestamp | dateformatYMD}} 申请</div>
 				<i class="iconfont iconarrow"></i>
 			</div>
 			<div class="no-more">———没有更多了————</div>
@@ -30,12 +36,12 @@
 						<div class="state-item" :class="{'active': state === item.value}" @click="setCheck(item)" v-for="(item,i) in states" :key="i">{{ item.label }}</div>
 					</div>
 					<div class="check-all" @click="setALL">
-						<i class="iconfont" :class="state === '' ? 'iconcheckbox' : 'iconicon-no-checkbox'"></i> 全部状态
+						<i class="iconfont" :class="state === '-1' ? 'iconcheckbox' : 'iconicon-no-checkbox'"></i> 全部状态
 					</div>
 
 					<div class="btns">
-						<div class="cancel" @click="hideFitler">取消</div>
-						<div class="ok">确定</div>
+						<div class="cancel" @click="cancleFitler">取消</div>
+						<div class="ok" @click="confirmFitler">确定</div>
 					</div>
 				</div>
 			</div>
@@ -44,39 +50,45 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
-	components: {
-		...mapGetters(['isAdmin']),
-		...mapGetters(['userinfo']),
+	computed: {
+	    ...mapGetters(['userinfo'])
 	},
 	data() {
 		return {
-			states: [{
-				label: '待开通',
-				value: 7
+			states: [
+			{
+				label: '审核中',
+				value: 0
 			},{
-				label: '待开通',
-				value: 1
-			},{
-				label: '待开通',
-				value: 2
-			},{
-				label: '待开通',
+				label: '已冻结',
 				value: 3
 			},{
-				label: '待开通',
+				label: '已驳回',
 				value: 4
 			},{
 				label: '待开通',
-				value: 5
+				value: 20
+			},{
+				label: '已开通',
+				value: 21
+			},{
+				label: '待签约',
+				value: 22
+			},{
+				label: '已签约',
+				value: 23
 			}],
-			state: '',
+			search: '',
+			stateStr:'全部状态',
 			filterShow: false,
-			list:[]
+			list:[],
+			state:'-1'
 		}
 	},
-	computed: {
+	onShow() {
+		this.getList();
 	},
 	methods: {
 		showFilter(){
@@ -87,15 +99,28 @@ export default {
 			uni.showTabBar();
 			this.filterShow = false;
 		},
-		search(e){
-			console.log(e)
+		cancleFitler(){
+			this.hideFitler();
+			this.state = -1;
+		},
+		confirmFitler(){
+			this.hideFitler();
+			this.getList();
+		},
+		searchShop(e){
+			console.log(e);
+			this.search = e.detail.value;
+			this.getList();
 		},
 		setCheck(item){
-			this.state = item.value
+			this.state = item.value;
+			this.stateStr = item.label;
+			this.getList();
 		},
 		setALL(){
-			this.state = '';
-			console.log(this)
+			this.state = '-1';
+			this.stateStr = '全部状态';
+			this.getList();
 		},
 		getList(){
 			uni.request({
@@ -104,8 +129,12 @@ export default {
 				header: {
 					'content-type': 'application/x-www-form-urlencoded'
 				},
-				data: {"supplierUserId":this.userinfo.supplierUserId},
+				data: {"supplierUserId":this.userinfo.supplierUserId,
+				"search":this.search,
+				"stateStr":this.state
+				},
 				success: res => {
+					console.info(res.data.data);
 					if (res.data.code === 0) {
 						this.list = res.data.data;
 					}else{
