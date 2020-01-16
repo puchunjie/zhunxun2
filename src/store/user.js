@@ -13,7 +13,10 @@ const user = {
         },
         setIsAdmin(context, payload) {
             context.commit('SET_IS_ADMIN', payload)
-        }
+        },
+		clearUserInfo(context) {
+		    context.commit('CLEAR_USER_INFO');
+		}
     },
     mutations: {
         'SET_USER_INFO': (state, payload) => {
@@ -22,7 +25,11 @@ const user = {
         },
         'SET_IS_ADMIN': (state, payload) => {
             state.isAdmin = payload;
-        }
+        },
+		'CLEAR_USER_INFO': (state) => {
+		    state.userinfo = {};
+		    state.isAdmin = false;
+		}
     }
 }
 
