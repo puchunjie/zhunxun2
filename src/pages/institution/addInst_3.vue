@@ -6,31 +6,31 @@
             <div class="form-group">
                 <div class="label"><span class="require">*</span>开户名称 </div>
                 <div class="value">
-                    <input v-model="form.shopName" placeholder="请输入机构开户名称" type="text">
+                    <input v-model="form.accountName" placeholder="请输入机构开户名称" type="text">
                 </div>
             </div>
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>开户银行 </div>
 			    <div class="value">
-			        <input v-model="form.shopName" placeholder="请输入机构开户银行" type="text">
+			        <input v-model="form.accountBank" placeholder="请输入机构开户银行" type="text">
 			    </div>
 			</div>
 			<div class="form-group" style="padding-bottom: 30rpx;">
 			    <div class="label"><span class="require">*</span>开户银行省市编码</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请输入开户银行省市编码" type="text">
+			        <input v-model="form.bankAddressCode" placeholder="请输入开户银行省市编码" type="text">
 			    </div>
 			</div>
 			<div class="form-group" style="padding-bottom: 30rpx;">
 			    <div class="label">开户银行全称（含支行）</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请输入开户银行全称（含支行）" type="text">
+			        <input v-model="form.bankName" placeholder="请输入开户银行全称（含支行）" type="text">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>银行账号 </div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请输入银行账号" type="text">
+			        <input v-model="form.accountNumber" placeholder="请输入银行账号" type="text">
 			    </div>
 			</div>
             <div class="form-div">
@@ -52,19 +52,19 @@
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>身份证姓名 </div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请填写小微商户本人身份证上的姓名" type="text">
+			        <input v-model="form.cardName" placeholder="请填写小微商户本人身份证上的姓名" type="text">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>身份证号码 </div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请填写身份证号码" type="text">
+			        <input v-model="form.cardNumber" placeholder="请填写身份证号码" type="text">
 			    </div>
 			</div>
 			<div class="form-group"  style="padding-bottom: 30rpx;">
 			    <div class="label"><span class="require">*</span>身份证有效期限</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请填写身份证有效期限" type="text">
+			        <input v-model="form.cardValidTime" placeholder="请填写身份证有效期限" type="text">
 			    </div>
 			</div>
 			<div class="query-btn">
@@ -88,45 +88,57 @@ export default {
 	    ...mapGetters(['isAdmin']),
 		...mapGetters(['userinfo']),
 	},
+	onLoad(e) {
+		this.form.shopId= e.id
+	},
     data() {
         return {
             form: {
-                shopName: '',
-                stopTime: '',
-                openTime: '',
-                shopAddress: '',
-                provinceId: 0,
-                cityId: 0,
-                districtId: 0,
-				creatorId:'',
-				logoImg:'',
+				shopId:0,
+                accountName: '',
+                accountBank: '',
+                bankAddressCode: '',
+                accountNumber: 0,
+                cardCopy: 0,
+                cardNational: 0,
+				cardName:'',
+				cardNumber:'',
+				cardValidTime:'',
             },
 			viewMode:false
         }
     },
     methods: {
-        ...mapActions(['setUserInfo']),
         topChange(imgs) {
-            this.form.logoImg = imgs;
-			this.viewMode = true
+            this.form.cardCopy = imgs;
         },
 		innerChange(imgs) {
-		    this.form.logoImg = imgs;
-			this.viewMode = true
+		    this.form.cardNational = imgs;
 		},
         submit() {
-			this.form.creatorId = this.userinfo.teacherId;
-			console.info(this.form);
+			let validKeys = ['accountName', 'accountBank', 'bankAddressCode', 'bankName', 'accountNumber', 'cardCopy'
+			, 'cardNational', 'cardName', 'cardNumber', 'cardValidTime'];
+			let noOk = validKeys.some(key => this.form[key] === '');
+			if (noOk) {
+			    uni.showToast({
+			        title: '*号为必填项',
+			        icon: 'none'
+			    })
+			    return
+			}
             uni.request({
                 method: 'POST',
-                url: `${this.doMain}/shop/teacher/addShopV2`,
+                url: `${this.doMain}/shop/addshopcard`,
                 header: {
                     'content-type': 'application/x-www-form-urlencoded'
                 },
                 data: this.form,
                 success: res => {
                     if (res.data.code === 0) {
-                        this.setUserInfo(res.data.data)
+                        uni.showToast({
+                            title: '添加成功',
+                            icon: 'none'
+                        })
                         uni.switchTab({
                             url: '/pages/index/index'
                         });

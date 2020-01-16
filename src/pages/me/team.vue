@@ -3,11 +3,11 @@
 		<div class="me-header">
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">{{suplier.supplierName}}</span>
+					<span class="name">{{suplier.supplierName  || ''}}</span>
 					<span class="level">{{suplier.supplierLevel}}级</span> 	
 				</div>
 				<div class="inst-name">
-					团队人数：{{suplier.userNum}}人
+					团队人数：{{suplier.userNum  || ''}}人
 				</div>
 			</div>
 		</div>
@@ -18,8 +18,8 @@
 			<div class="link-item" v-for="(item,i) in suplierUserList" :key="i" @tap="viewSuplierUser" :data-supplierUserId="item.supplierUserId">
 				<image class="portrait" src="../../static/boy.png"></image>
 		        <div class="name-div">
-		        	<span class="name-top">{{ item.userName }}</span>
-		        	<span class="name-bottom">拓展{{ item.createShopNum }}家机构</span> 
+		        	<span class="name-top">{{ item.userName  || ''}}</span>
+		        	<span class="name-bottom">拓展{{ item.createShopNum  || ''}}家机构</span> 
 		        </div> 
 				<i class="iconfont iconico qr"></i>
 		        <i class="iconfont arrow iconarrow"></i>

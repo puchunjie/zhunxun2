@@ -3,88 +3,51 @@
 		<image class="step" src="../../static/step2.png"></image>
         <div class="addinst-form">
 			<div class="form-title">商户类型</div>
-			<singleElection title="商户类型" v-model="form.shopbusinessType" ScEnumKey="shopBusinessTypeEnum"></singleElection>
+			<singleElection title="商户类型" v-model="storeType" ScEnumKey="shopBusinessTypeEnum"></singleElection>
 			<div class="query-btn">
 				<div class="btn" @click="submit" :data-type="1">下一步</div>
 			</div>
         </div>
-    
     </view>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import { mapActions } from 'vuex'
 import singleElection from '~/singleElection.vue'
-import citySelect from '@/components/citySelect.vue'
-import dateSelect from '@/components/dateSelect.vue'
-import upload from '@/components/upload.vue'
 export default {
-    components: { citySelect, dateSelect, upload, singleElection },
-	computed: {
-	    ...mapGetters(['isAdmin']),
-		...mapGetters(['userinfo']),
-	},
+    components: { singleElection },
     data() {
         return {
-            form: {
-                shopName: '',
-                stopTime: '',
-                openTime: '',
-                shopAddress: '',
-                provinceId: 0,
-                cityId: 0,
-                districtId: 0,
-				creatorId:'',
-				logoImg:'',
-            },
-			viewMode:false
+            storeType:0
         }
     },
+	onLoad(e) {
+		this.shopId= e.id
+	},
     methods: {
-        ...mapActions(['setUserInfo']),
-        topChange(imgs) {
-            this.form.logoImg = imgs;
-			this.viewMode = true
-        },
-		innerChange(imgs) {
-		    this.form.logoImg = imgs;
-			this.viewMode = true
-		},
         submit() {
-			/*this.form.creatorId = this.userinfo.teacherId;
-			console.info(this.form);
             uni.request({
                 method: 'POST',
-                url: `${this.doMain}/shop/teacher/addShopV2`,
+                url: `${this.doMain}/shop/modifyshopstoretype`,
                 header: {
                     'content-type': 'application/x-www-form-urlencoded'
                 },
-                data: this.form,
+                data: {"shopId":this.shopId,"storeType":this.storeType},
                 success: res => {
                     if (res.data.code === 0) {
-                        this.setUserInfo(res.data.data)
-                        uni.switchTab({
-                            url: '/pages/index/index'
-                        });
-                    }
+                       uni.navigateTo({
+                       	url:'/pages/institution/addInst_3?id='+this.shopId
+                       });
+                    }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
                 }
-            });*/
-			uni.navigateTo({
-				url:'/pages/institution/addInst_3'
-			});
-        },
-        cityOnConfirm(data) {
-            this.form.provinceId = data.value[0];
-            this.form.cityId = data.value[1];
-            this.form.districtId = data.value[2];
-        },
-		bindStartTimeChange: function(e) {
-			this.form.openTime = e.detail.value
-		},
-		bindStopTimeChange: function(e) {
-			this.form.stopTime = e.detail.value
-		},
+            });
+			
+        }
     }
 }
 </script>

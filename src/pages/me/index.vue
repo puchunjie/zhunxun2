@@ -4,25 +4,25 @@
 			<image class="portrait" src="../../static/boy.png"></image>
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">{{suplierUser.userName}}</span>
+					<span class="name">{{suplierUser.userName || ''}}</span>
 					<span class="shopType" v-show="suplierUser.isAdmin == 0">个人服务商</span>
 					<span class="shopType" v-show="suplierUser.isAdmin == 1">城市服务商</span>
 					<span class="level" v-show="suplierUser.isAdmin == 0">{{suplierUser.userLevel}}级</span> 	
 					<span class="level" v-show="suplierUser.isAdmin == 1">{{suplierUser.supplierLevel}}级</span> 
 				</div>
 				<div class="inst-name">
-					{{suplierUser.supplierName}}
+					{{suplierUser.supplierName || ''}}
 				</div>
 			</div>
 		</div>
 		<div class="menu-panel">
 			<div class="menu-item">
 				<span class="label">拓展奖励</span>
-				<span class="label">{{suplierUser.expandBalanceStr}}</span>
+				<span class="label">{{suplierUser.expandBalanceStr || ''}}</span>
 			</div>
 			<div class="menu-item">
 				<span class="label">运营奖励</span>
-				<span class="label">{{suplierUser.operateBalanceStr}}</span>
+				<span class="label">{{suplierUser.operateBalanceStr || ''}}</span>
 			</div>
 			<div class="menu-item">
 				<span class="label">增值奖励</span>
@@ -34,6 +34,11 @@
 		        <i class="iconfont icon" :class="link.icon"></i> {{ link.label }}
 		        <i class="iconfont arrow iconarrow"></i>
 		    </div>
+			<button open-type="contact" class="link-item" style="background:#FFFFFF">
+			    <i class="iconfont icon iconsuplier-kefu"></i>
+				<span class="lianxikefu">联系客服</span>
+				<i class="iconfont arrow iconarrow"></i>
+			</button>
 		</div>
 		    
 		<div class="login-out" @click="logout">退出账户</div>
@@ -71,11 +76,7 @@ export default {
         			    label: '收益提现',
         			    icon: 'iconsuplier-income',
         			    path: '/pages/user/changePwd'
-        			}, */{
-        			    label: '联系客服',
-        			    icon: 'iconsuplier-kefu',
-        			    path: '/pages/user/changePwd'
-        			}
+        			}, */
         		]
             return arr
         }
@@ -239,5 +240,8 @@ page{
 		}
 	}
 }
-
+.lianxikefu{
+	position: absolute;
+	left: 89rpx;
+}
 </style>

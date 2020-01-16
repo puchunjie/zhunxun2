@@ -13,8 +13,9 @@
 		<div class="add-new" @click="openToAddInst">+ 拓展新机构</div>
 
 		<div class="list-content">
-			<div class="list-item" v-for="(item,i) in list" :key="i" @tap="openToShopView" :data-shopId="item.shopId">
-				<h3 class="name">{{item.shopName}} 
+			<div class="list-item" v-for="(item,i) in list" :key="i" @tap="openToShopView(item)" :data-shopId="item.shopId">
+				<h3 class="name">
+					<span class="shopname">{{item.shopName}} </span>
 					<span class="state-btn" v-if="item.state == 1 && (item.isSign == 0 || item.isSign == null) && item.isOpen == 1" :class="'state'+item.state">待签约</span>
 					<span class="state-btn" v-if="item.state == 1 && item.isSign == 1 && item.isOpen == 1" :class="'state'+item.state">已签约</span> 
 					<span class="state-btn" v-if="item.state == 1 && (item.isOpen == 0|| item.isOpen == null) && (item.isSign == 0|| item.isSign == null)" :class="'state'+item.state">待开通</span> 
@@ -151,6 +152,11 @@ export default {
 			uni.navigateTo({
 				url:`../institution/addInst_1`
 			})
+		},
+		openToShopView(item){
+			uni.navigateTo({
+				url:`../institution/instView?id=`+item.shopId
+			})
 		}
 	}
 }
@@ -254,6 +260,12 @@ page {
 					line-height: 36upx;
 					vertical-align: middle;
 					margin-left: 10upx;
+					&.state{
+						background-color: #0099cc;
+					}
+					&.state0{
+						background-color: #0099cc;
+					}
 					&.state1{
 						background-color: #0099cc;
 					}
@@ -388,5 +400,8 @@ page {
 			}
 		}
 	}
+}
+.shopname{
+	width:600upx;
 }
 </style>

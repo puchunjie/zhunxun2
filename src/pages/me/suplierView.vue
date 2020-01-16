@@ -4,14 +4,14 @@
 			<image class="portrait" src="../../static/boy.png"></image>
 			<div class="me-info">
 				<div class="me-name">
-					<span class="name">{{suplierUser.userName}}</span>
+					<span class="name">{{suplierUser.userName || ''}}</span>
 					<span class="shopType" v-show="suplierUser.isAdmin == 0">个人服务商</span>
 					<span class="shopType" v-show="suplierUser.isAdmin == 1">城市服务商</span>
 					<span class="level" v-show="suplierUser.isAdmin == 0">{{suplierUser.userLevel}}级</span> 	
 					<span class="level" v-show="suplierUser.isAdmin == 1">{{suplierUser.supplierLevel}}级</span> 
 				</div>
 				<div class="inst-name">
-					{{suplierUser.supplierName}}
+					{{suplierUser.supplierName || ''}}
 				</div>
 			</div>
 		</div>

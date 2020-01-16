@@ -2,24 +2,25 @@
 import { mapActions } from 'vuex'
 export default {
 	methods: {
-		// ...mapActions(['setCityData']),
-		// getCitys() {
-		// 	uni.request({
-		// 		method: 'POST',
-		// 		url: `${this.doMain}/location/getLocationV2`,
-		// 		header: {
-		// 			'content-type': 'application/x-www-form-urlencoded'
-		// 		},
-		// 		success: (res) => {
-		// 			if (res.data.code === 0) {
-		// 				this.setCityData(res.data.data)
-		// 			}
-		// 		}
-		// 	});
-		// }
+		...mapActions(['setCityData']),
+		getCitys() {
+			uni.request({
+				method: 'POST',
+				url: `${this.doMain}/location/getLocationV2`,
+				header: {
+					'content-type': 'application/x-www-form-urlencoded'
+				},
+				success: (res) => {
+					console.info("城市"+res.data.data);
+					if (res.data.code === 0) {
+						this.setCityData(res.data.data)
+					}
+				}
+			});
+		}
 	},
 	async created() {
-		// this.getCitys();
+		this.getCitys();
 	}
 }
 </script>

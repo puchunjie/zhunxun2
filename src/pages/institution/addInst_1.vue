@@ -13,7 +13,7 @@
 			<div class="form-group">
 			    <div class="label">门店名称</div>
 			    <div class="value">
-			        <input v-model="form.shopName" placeholder="请输入机构门店名称或机构简称" type="text">
+			        <input v-model="form.shopSubName" placeholder="请输入机构门店名称或机构简称" type="text">
 			    </div>
 			</div>
 			<citySelect ref="cityPicker" noPadding @onConfirm="cityOnConfirm"></citySelect>
@@ -26,19 +26,19 @@
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>联系人</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请输入联系人信息" type="text">
+			        <input v-model="form.contactName" placeholder="请输入联系人信息" type="text">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <div class="label"><span class="require">*</span>联系电话</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="请输入负责任联系电话" type="text">
+			        <input v-model="form.contactPhone" placeholder="请输入负责任联系电话" type="text">
 			    </div>
 			</div>
 			<div class="form-group">
 			    <div class="label">客服电话</div>
 			    <div class="value">
-			        <input v-model="form.shopAddress" placeholder="手机/座机（需填区号）/400电话" type="text">
+			        <input v-model="form.serviceTel" placeholder="手机/座机（需填区号）/400电话" type="text">
 			    </div>
 			</div>
             <div class="form-div">
@@ -53,7 +53,7 @@
                 <div class="form-group block">
                     <div class="label block" style="text-align: left;"><span class="require">*</span>机构内部照片<span class="tip">(请上传机构内部照片)</span></div>
                     <div class="value">
-                        <upload ref="upload" @onChange="innerChange" :viewMode="viewMode"></upload>
+                        <upload ref="upload1" @onChange="innerChange" :viewMode="viewMode"></upload>
                     </div>
                 </div>
             </div>
@@ -81,63 +81,74 @@ export default {
     data() {
         return {
             form: {
+                shopType: '',
                 shopName: '',
-                stopTime: '',
-                openTime: '',
+                shopSubName: '',
                 shopAddress: '',
                 provinceId: 0,
                 cityId: 0,
                 districtId: 0,
-				creatorId:'',
-				logoImg:'',
+				contactName:'',
+				contactPhone:'',
+				serviceTel:'',
+				picOutStr:'',
+				picInStr:'',
+				supplierUserId:''
             },
-			viewMode:false
+			viewMode:false,
+			shopId:''
         }
     },
     methods: {
-        ...mapActions(['setUserInfo']),
         topChange(imgs) {
-            this.form.logoImg = imgs;
-			this.viewMode = true
+            this.form.picOutStr = imgs;
+			//this.viewMode = true
         },
 		innerChange(imgs) {
-		    this.form.logoImg = imgs;
-			this.viewMode = true
+		    this.form.picInStr = imgs;
+			//this.viewMode = true
 		},
         submit() {
-			/*this.form.creatorId = this.userinfo.teacherId;
-			console.info(this.form);
+			this.form.supplierUserId = this.userinfo.supplierUserId;
+			let validKeys = ['shopType', 'shopName', 'shopAddress', 'provinceId', 'cityId', 'districtId'
+			, 'contactName', 'contactPhone', 'picOutStr', 'picInStr'];
+			let noOk = validKeys.some(key => this.form[key] === '');
+			if (noOk) {
+			    uni.showToast({
+			        title: '*号为必填项',
+			        icon: 'none'
+			    })
+			    return
+			}
             uni.request({
                 method: 'POST',
-                url: `${this.doMain}/shop/teacher/addShopV2`,
+                url: `${this.doMain}/supplier/user/addshop`,
                 header: {
                     'content-type': 'application/x-www-form-urlencoded'
                 },
                 data: this.form,
                 success: res => {
                     if (res.data.code === 0) {
-                        this.setUserInfo(res.data.data)
-                        uni.switchTab({
-                            url: '/pages/index/index'
+                        this.shopId = res.data.data;
+                        uni.navigateTo({
+                        	url:'/pages/institution/addInst_2?id='+this.shopId
                         });
-                    }
+                    }else{
+						uni.showToast({
+							title:res.data.fieldErrors[0].message,
+							icon: 'none',
+							duration: 1000
+						})
+					}
                 }
-            });*/
-			uni.navigateTo({
-				url:'/pages/institution/addInst_2'
-			});
+            });
+			
         },
         cityOnConfirm(data) {
             this.form.provinceId = data.value[0];
             this.form.cityId = data.value[1];
             this.form.districtId = data.value[2];
-        },
-		bindStartTimeChange: function(e) {
-			this.form.openTime = e.detail.value
-		},
-		bindStopTimeChange: function(e) {
-			this.form.stopTime = e.detail.value
-		},
+        }
     }
 }
 </script>

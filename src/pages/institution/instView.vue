@@ -2,59 +2,121 @@
 	<div class="class-detail-teacher">
 		<div class="class-info">
 		    <p class="p5">
-				大树音乐
-				<span class="state0">未开通</span>
+				{{shop.shopName || ''}}
+				<span class="state-btn" v-if="shop.state == 1 && (shop.isSign == 0 || shop.isSign == null) && shop.isOpen == 1" :class="'state'+shop.state">待签约</span>
+				<span class="state-btn" v-if="shop.state == 1 && shop.isSign == 1 && shop.isOpen == 1" :class="'state'+shop.state">已签约</span> 
+				<span class="state-btn" v-if="shop.state == 1 && (shop.isOpen == 0|| shop.isOpen == null) && (shop.isSign == 0|| shop.isSign == null)" :class="'state'+shop.state">待开通</span> 
+				<span class="state-btn" v-if="shop.state == 1 && shop.isOpen == 1 && (shop.isSign == 0|| shop.isSign == null)" :class="'state'+shop.state">已开通</span> 
+				<span class="state-btn" v-if="shop.state != 1" :class="'state'+shop.state">{{ shop.state | enumFilter(ScEnumKeys.shopStateEnum) }}</span> 
 			</p>
 			<p class="p2">
-				申请时间：2019/12/01 14:00
+				申请时间：{{shop.createdTimestamp | dateformatYMDHM}}
 			</p>
 		</div>
 		<div class="class-info">
 		    <p class="p4">基本信息</p>
 		    <p class="p3">
-		    	机构类型：器乐
+		    	机构类型：
+				<span v-if="shop.shopType == 0">器乐</span>
+				<span v-if="shop.shopType == 1">舞蹈</span>
+				<span v-if="shop.shopType == 2">声乐</span>
 		    </p>
 			<p class="p3">
-				机构号码：1056 2831
+				机构号码：{{shop.shopCode || ''}}
 			</p>
 			<p class="p3">
-				门店名称：九拍音乐矿业大学店
+				机构名称：{{shop.shopName || ''}}
 			</p>
 			<p class="p3">
-				经营地址：江苏省徐州市泉山区矿业大学中山北路2号向北200米
+				门店名称：{{shop.shopSubName || ''}}
 			</p>
 			<p class="p3">
-				联系人：王浩
+				机构地址：{{shop.districtFullName || ''}}
 			</p>
 			<p class="p3">
-				联系电话：152 **** 6354
+				联系人：{{shop.contactName || ''}}
+			</p>
+			<p class="p3">
+				联系电话：{{shop.contactPhone || ''}}
+			</p>
+			<p class="p3">
+				客服电话：{{shop.serviceTel || ''}}
+			</p>
+			<p class="p3">
+				机构门头照片：
+				<span v-for="pic in shop.shopPicList">
+					<image v-if="pic.picType == 1" class="logo" :src="pic.picUrl"></image>
+				</span>
+			</p>
+			<p class="p3">
+				机构内部照片：
+				<span v-for="pic in shop.shopPicList">
+					<image v-if="pic.picType == 0" class="logo" :src="pic.picUrl"></image>
+				</span>
 			</p>
 		</div>
 		<div class="class-info">
+		    <p class="p4">商户类型</p>
+		    <p class="p3">
+		    	商户类型：
+				<span v-if="shop.storeType == 0">小微商户</span>
+				<span v-if="shop.storeType == 1">特约商户</span>
+		    </p>
+		</div>
+		<div class="class-info">
 		    <p class="p4">支付信息</p>
-			<p class="p3">
+			<!-- <p class="p3">
 				经营行业：居民生活/商业服务装饰/设计
+			</p> -->
+			<p class="p3">
+				开户名称：{{shop.shopCard.accountName || ''}}
 			</p>
 			<p class="p3">
-				银行卡号：**** **** ****  8590
+				开户银行：{{shop.shopCard.accountBank || ''}}
 			</p>
 			<p class="p3">
-				交易费率：0.6%
+				开户银行省市编码：{{shop.shopCard.bankAddressCode || ''}}
 			</p>
 			<p class="p3">
+				开户银行全称：{{shop.shopCard.bankName || ''}}
+			</p>
+			<p class="p3">
+				银行账户：{{shop.shopCard.accountNumber || ''}}
+			</p>
+			<p class="p3">
+				身份证人像面照片：
+				<image v-if="shop.shopCard.cardCopy != null" class="logo" :src="shop.shopCard.cardCopy"></image>
+			</p>
+			<p class="p3">
+				身份证国徽面照片：
+				<image  v-if="shop.shopCard.cardNational != null" class="logo" :src="shop.shopCard.cardNational"></image>
+			</p>
+			<p class="p3">
+				身份证姓名：{{shop.shopCard.cardName || ''}}
+			</p>
+			<p class="p3">
+				身份号码：{{shop.shopCard.cardNumber || ''}}
+			</p>
+			<p class="p3">
+				身份证有效期：{{shop.shopCard.cardValidTime || ''}}
+			</p>
+			<!--<p class="p3">
+				交易费率：{{shop.contactPhone}}
+			</p>
+			 <p class="p3">
 				信用卡支付：：器乐
-			</p>
+			</p> -->
 		</div>
 		<div class="class-info">
 		    <p class="p4">缴费情况</p>
 			<p class="p3">
-				年费缴纳：2400/年
+				年费缴纳：{{shop.yearPrice | priceFilter}}/年
 			</p>
 			<p class="p3">
-				通过时间：2019/12/01 14:00
+				通过时间：{{shop.checkTime | dateformatYMDHM}}
 			</p>
 			<p class="p3">
-				到期时间：2020/12/01 24:00
+				到期时间：{{shop.validEnd | dateformatYMDHM}}
 			</p>
 		</div>
 	</div>
@@ -68,16 +130,16 @@ export default {
     data() {
         return {
 			shopId:0,
-			shop:null,
+			shop:{},
 			agencyIntro:''
         }
     },
     computed: {
-		...mapGetters(['isAdmin']),
+		/*...mapGetters(['isAdmin']),
 		...mapGetters(['userinfo']),
 		richText(){
 		    return escape2Html(this.agencyIntro)
-		}
+		}*/
     },
     methods: {
 		getShopDetail(){
@@ -99,10 +161,16 @@ export default {
 									this.shop.shopPicList[i].picUrl = this.imgUrl + this.shop.shopPicList[i].picUrl;
 								}
 							}
-							if(this.shop.shopVideoList != null && this.shop.shopVideoList.length > 0){
-								for (let j in this.shop.shopVideoList) {
-									this.shop.shopVideoList[j].videoUrl = this.imgUrl + this.shop.shopVideoList[j].videoUrl;
+							if(this.shop.shopPicOutList != null && this.shop.shopPicOutList.length > 0){
+								for (let j in this.shop.shopPicOutList) {
+									this.shop.shopPicOutList[j].picUrl = this.imgUrl + this.shop.shopPicOutList[j].picUrl;
 								}
+							}
+							if(this.shop.shopCard.cardCopy != null && this.shop.shopCard.cardCopy != ''){
+								this.shop.shopCard.cardCopy = this.imgUrl + this.shop.shopCard.cardCopy;
+							}
+							if(this.shop.shopCard.cardNational != null && this.shop.shopCard.cardNational != ''){
+								this.shop.shopCard.cardNational = this.imgUrl + this.shop.shopCard.cardNational;
 							}
 						}
 			        }
@@ -111,10 +179,10 @@ export default {
 		},
     },
 	onLoad(e) {
-		this.shopId = e.shopId;
+		this.shopId = e.id;
 	},
 	onShow() {
-		//this.getShopDetail();
+		this.getShopDetail();
 	}
 }
 </script>
@@ -327,5 +395,32 @@ page {
 		width:80upx;
 		height: 80upx;
 		vertical-align: middle;
+	}
+	.state-btn{
+		display: inline-block;
+		width: 100upx;
+		height: 46upx;
+		color: #fff;
+		font-size: 24upx;
+		border-radius: 36upx;
+		text-align: center;
+		line-height: 36upx;
+		vertical-align: middle;
+		margin-left: 10upx;
+		&.state{
+			background-color: #0099cc;
+		}
+		&.state0{
+			background-color: #0099cc;
+		}
+		&.state1{
+			background-color: #0099cc;
+		}
+		&.state2{
+			background-color: #009900;
+		}
+		&.state3{
+			background-color: #ff8d1a;
+		}
 	}
 </style>

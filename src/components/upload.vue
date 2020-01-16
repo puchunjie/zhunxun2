@@ -2,7 +2,7 @@
     <view class='upload-container'>
         <div class="up-load-item" v-for="(img,i) in imgList" :key="i" @click="viewImg(img)">
             <image class="view-img" :src="img"></image>
-            <i v-if="!hideDel" class="iconfont iconshanchu del-icon" @click.stop="del(img,i)"></i>
+            <i v-if="!hideDel" class="iconfont iconshanchu del-icon" @click.stop="del(img,i)">×</i>
         </div>
         <div class="up-load-item add-div" @click="choseImg" v-if="!viewMode">
             <i class="iconfont iconic_image_upload"></i>
