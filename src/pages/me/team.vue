@@ -84,7 +84,7 @@ export default {
 		},
 		addUser(){
 			uni.redirectTo({
-			    url: '/pages/login/suplierRegister'
+			    url: '/pages/login/suplierPic'
 			});
 		},
 		viewSuplierUser(e){

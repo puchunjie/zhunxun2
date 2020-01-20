@@ -71,6 +71,11 @@
 			"style": {
 				"navigationBarTitleText": "追寻服务商助手"
 			}
+		},{
+			"path": "pages/login/suplierPic",
+			"style": {
+				"navigationBarTitleText": "添加团队成员"
+			}
 		}
 	],
 	"globalStyle": {

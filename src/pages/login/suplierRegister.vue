@@ -52,6 +52,13 @@ export default {
 			yzmtrue:''
         }
     },
+	onLoad(e) {
+		if (e.scene != undefined){
+			this.form.supplierId = e.scene;
+		}else{
+			this.form.supplierId = this.userinfo.supplierId;
+		}
+	},
     methods: {
 		getYZM(data){
 			this.yzmtrue = data
@@ -97,7 +104,6 @@ export default {
 				})
 				return false;
 			}
-			this.form.supplierId = this.userinfo.supplierId;
             uni.request({
                 method: 'POST',
                 url: `${this.doMain}/supplier/user/add`,
@@ -113,7 +119,7 @@ export default {
 							duration: 1000
 						})
                         uni.navigateTo({
-                        	url:'/pages/me/team'
+                        	url:'/pages/login/suplier'
                         })
                     }else{
 						uni.showToast({
