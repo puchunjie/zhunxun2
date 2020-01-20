@@ -54,7 +54,7 @@ export default {
     },
 	onLoad(e) {
 		if (e.scene != undefined){
-			this.form.supplierId = e.scene;
+			this.form.supplierId = decodeURIComponent(e.scene);
 		}else{
 			this.form.supplierId = this.userinfo.supplierId;
 		}

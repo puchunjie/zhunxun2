@@ -2,7 +2,7 @@
     <view class="login-container">
         <div class="login-form">
 			<div class="tip">请出示小程序码 扫一扫添加团队成员</div>
-			<image :src="pic"></image>
+			<image :src="pic" class="pic"></image>
 			<div class="tip">请使用最新版微信</div>
         </div>
     </view>
@@ -74,5 +74,8 @@ page{
 	line-height: 150%;
 	text-align: center;
 }
-
+.pic{
+	width:400upx;
+	height:400upx;
+}
 </style>
